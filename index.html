@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Feliz Cumple Isa 💖</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0; height: 100vh;
+            background: linear-gradient(135deg, #fbd3e9, #bb377d);
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Quicksand', sans-serif; overflow: hidden;
+        }
+
+        .contenedor { width: 360px; height: 550px; perspective: 1500px; }
+
+        .carta {
+            width: 100%; height: 100%; position: relative;
+            transform-style: preserve-3d; transition: transform 1.5s ease;
+            cursor: pointer;
+        }
+
+        .carta.abierta { transform: rotateY(-170deg); }
+
+        .portada, .interior {
+            position: absolute; width: 100%; height: 100%;
+            border-radius: 20px; backface-visibility: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            padding: 25px; box-sizing: border-box;
+        }
+
+        .portada {
+            background: linear-gradient(135deg, #ff5e8a, #ff2f6d);
+            color: white; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            border: 5px solid white;
+        }
+        
+        .portada span { font-size: 4rem; }
+        .portada h2 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; }
+
+        .interior {
+            background: white; color: #444;
+            transform: rotateY(180deg); overflow-y: auto;
+            display: flex; flex-direction: column;
+        }
+
+        h1 { text-align: center; color: #ff4081; font-family: 'Dancing Script', cursive; font-size: 2.2rem; margin-bottom: 10px; }
+
+        .texto-original {
+            font-size: 1.05rem; line-height: 1.6; text-align: center; flex-grow: 1;
+        }
+
+        .firma {
+            margin-top: 15px; text-align: right; font-style: italic;
+            color: #ff4081; font-family: 'Dancing Script', cursive; font-size: 1.4rem;
+        }
+
+        #btnPlay {
+            background: #ff4081; color: white; border: none;
+            padding: 10px; border-radius: 10px; font-weight: bold;
+            margin-top: 10px; cursor: pointer; display: block;
+            width: 100%; box-shadow: 0 4px 10px rgba(255, 64, 129, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+    <div class="carta" id="miCarta" onclick="abrirCarta()">
+        
+        <div class="portada">
+            <span>💌</span>
+            <h2>Para Isa</h2>
+            <p>Toca para abrir</p>
+        </div>
+
+        <div class="interior">
+            <h1>🎂 Feliz Cumpleaños Isa 🎉</h1>
+
+            <div class="texto-original">
+                Hoy celebro tu vida y agradezco a Dios por tu amistad 💖<br><br>
+
+                Gracias por ser mi mejor amiga,<br>
+                por tu apoyo sincero,<br>
+                por tu sonrisa y tu buen corazón 🌸<br><br>
+
+                Que Dios te bendiga siempre,<br>
+                que te guarde y te proteja,<br>
+                y que cada paso de tu vida<br>
+                esté lleno de paz, amor y felicidad 🙏✨<br><br>
+
+                Nunca olvides lo especial que eres<br>
+                y lo mucho que significas para mí 💕
+            </div>
+
+            <div class="firma">
+                Con todo mi cariño 💌<br>
+                Tu mejor amigo
+            </div>
+
+            <button id="btnPlay">🎵 Activar Música</button>
+        </div>
+    </div>
+</div>
+
+<audio id="musica" loop>
+    <source src="happy-birthday.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    function abrirCarta() {
+        const carta = document.querySelector('.carta');
+        const musica = document.getElementById('musica');
+        
+        if(!carta.classList.contains('abierta')){
+            carta.classList.add('abierta');
+            // Intenta reproducir el audio al abrir la carta
+            musica.play().catch(() => console.log("El navegador requiere una acción del usuario para sonar"));
+            lanzarConfeti();
+        }
+    }
+
+    // Botón manual para asegurar la reproducción en cualquier dispositivo
+    document.getElementById('btnPlay').addEventListener('click', (e) => {
+        e.stopPropagation(); // Evita que se dispare el evento de la carta
+        const musica = document.getElementById('musica');
+        musica.play();
+        document.getElementById('btnPlay').innerHTML = "🎶 Sonando...";
+        document.getElementById('btnPlay').style.background = "#4caf50";
+    });
+
+    function lanzarConfeti() {
+        var duration = 10 * 1000;
+        var animationEnd = Date.now() + duration;
+        var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+        function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+        var interval = setInterval(function() {
+            var timeLeft = animationEnd - Date.now();
+            if (timeLeft <= 0) return clearInterval(interval);
+            
+            var particleCount = 50 * (timeLeft / duration);
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+        }, 250);
+    }
+</script>
+
+</body>
+</html>
